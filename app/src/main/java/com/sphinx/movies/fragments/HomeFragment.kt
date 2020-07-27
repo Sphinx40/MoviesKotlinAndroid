@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sphinx.movies.*
 import com.sphinx.movies.activities.MainActivity
@@ -65,8 +66,12 @@ class HomeFragment : Fragment() {
         view.recyclerView2.adapter = topRatedMoviesAdapter
 
         if ((popularMovies.size == 0) or (topRatedMovies.size == 0)) {
-            getPopularMovies()
-            getTopRatedMovies()
+            val apiService = ServiceBuilder.create()
+            val callPopularMovies = apiService.fetchPopularMovies()
+            val callTopRatedMovies = apiService.fetchTopRatedMovies()
+
+            getMovies(popularMoviesAdapter, popularMovies, callPopularMovies)
+            getMovies(topRatedMoviesAdapter, topRatedMovies, callTopRatedMovies)
         } else {
             popularMoviesAdapter.addAll(popularMovies)
             topRatedMoviesAdapter.addAll(topRatedMovies)
@@ -75,39 +80,23 @@ class HomeFragment : Fragment() {
             topRatedMoviesAdapter.notifyDataSetChanged()
         }
 
-
-        popularMoviesAdapter.setOnItemClickListener { item, _ ->
-            val movieItem = item as MovieItem
-            val intent = Intent(this.context, MovieDetailsActivity::class.java)
-            intent.putExtra("movieId", movieItem.movie.id)
-            startActivity(intent)
-        }
-
-        topRatedMoviesAdapter.setOnItemClickListener { item, _ ->
-            val movieItem = item as MovieItem
-            val intent = Intent(this.context, MovieDetailsActivity::class.java)
-            intent.putExtra("movieId", movieItem.movie.id)
-            startActivity(intent)
-        }
-
+        onClickListener(popularMoviesAdapter)
+        onClickListener(topRatedMoviesAdapter)
 
         return view
     }
 
-    private fun getTopRatedMovies() {
-        val apiService = ServiceBuilder.create()
-        val callTopRatedMovies = apiService.fetchTopRatedMovies()
-
-        callTopRatedMovies.enqueue(object : Callback<Movies> {
+    private fun getMovies(moviesAdapter: GroupAdapter<GroupieViewHolder>, list: ArrayList<MovieItem>, callMovies: Call<Movies>) {
+        callMovies.enqueue(object : Callback<Movies> {
             override fun onResponse(call: Call<Movies>, response: Response<Movies>) {
                 if (response.code() == 200) {
                     val res = response.body()!!.results
                     for (movie in res) {
                         val movieItem = MovieItem(movie)
-                        topRatedMovies.add(movieItem)
-                        topRatedMoviesAdapter.add(movieItem)
+                        moviesAdapter.add(movieItem)
+                        list.add(movieItem)
                     }
-                    topRatedMoviesAdapter.notifyDataSetChanged()
+                    moviesAdapter.notifyDataSetChanged()
                 }
             }
             override fun onFailure(call: Call<Movies>, t: Throwable) {
@@ -116,29 +105,15 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun getPopularMovies() {
-        val apiService = ServiceBuilder.create()
-        val callPopularMovies = apiService.fetchPopularMovies()
-
-        callPopularMovies.enqueue(object : Callback<Movies> {
-            override fun onResponse(call: Call<Movies>, response: Response<Movies>) {
-                if (response.code() == 200) {
-                    val res = response.body()!!.results
-                    for (movie in res) {
-                        val movieItem = MovieItem(movie)
-                        popularMoviesAdapter.add(movieItem)
-                        popularMovies.add(movieItem)
-                    }
-                    popularMoviesAdapter.notifyDataSetChanged()
-                }
-            }
-            override fun onFailure(call: Call<Movies>, t: Throwable) {
-                println(t.message)
-            }
-        })
+    private fun onClickListener(adapter: GroupAdapter<GroupieViewHolder>) {
+        adapter.setOnItemClickListener { item, _ ->
+            val movieItem = item as MovieItem
+            val intent = Intent(this.context, MovieDetailsActivity::class.java)
+            intent.putExtra("movieId", movieItem.movie.id)
+            startActivity(intent)
+        }
     }
-
-
+    
     companion object {
         /**
          * Use this factory method to create a new instance of

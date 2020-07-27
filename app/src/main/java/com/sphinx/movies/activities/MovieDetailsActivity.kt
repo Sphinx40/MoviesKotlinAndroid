@@ -30,14 +30,24 @@ class MovieDetailsActivity : AppCompatActivity() {
         callFetchMovieById.enqueue(object : Callback<MovieDetails> {
             override fun onResponse(call: Call<MovieDetails>, response: Response<MovieDetails>) {
                 if (response.code() == 200) {
+                    var genresText = ""
                     val res = response.body()!!
+                    println(res)
                     Picasso
                         .get()
                         .load(imageUrl + imageSizeBig + res.backdrop_path)
                         .into(movieDetailsImage)
                     movieDetailsTitle.text = res.title
-                    showElements()
                     progressBar.visibility = View.INVISIBLE
+                    overview.text = "${res.overview}"
+                    originalLanguage.text = "Язык: ${res.original_language}"
+                    release_date.text = "Дата выхода: ${res.release_date}"
+                    for (genre in res.genres) {
+                        genresText += genre.name+", "
+                    }
+                    genres.text = "Жанры: $genresText"
+                    budget.text = "Бюджет: ${res.budget}"
+                    showElements()
                 }
             }
             override fun onFailure(call: Call<MovieDetails>, t: Throwable) {
@@ -48,14 +58,28 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private fun showElements() {
         val visible = View.VISIBLE
+        movieDetailsImage.visibility = visible
+        movieDetailsTitle.visibility = visible
         arrow_back.visibility = visible
         favoriteMovie.visibility = visible
+        overview.visibility = visible
+        originalLanguage.visibility = visible
+        release_date.visibility = visible
+        genres.visibility = visible
+        budget.visibility = visible
     }
 
     private fun hideElements() {
         val invisible = View.INVISIBLE
+        movieDetailsImage.visibility = invisible
+        movieDetailsTitle.visibility = invisible
         arrow_back.visibility = invisible
         favoriteMovie.visibility = invisible
+        overview.visibility = invisible
+        originalLanguage.visibility = invisible
+        release_date.visibility = invisible
+        genres.visibility = invisible
+        budget.visibility = invisible
     }
 
     fun goBack(view: View) {
