@@ -1,11 +1,14 @@
-package com.sphinx.movies
+package com.sphinx.movies.adapterItems
 
+import com.sphinx.movies.Config
+import com.sphinx.movies.MovieResult
+import com.sphinx.movies.R
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
 import kotlinx.android.synthetic.main.movie_card.view.*
 
-class MovieItem(val movie: MovieResult): Item<GroupieViewHolder>() {
+class HomeMovieItem(val movie: MovieResult): Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
         viewHolder.itemView.title.text = movie.title

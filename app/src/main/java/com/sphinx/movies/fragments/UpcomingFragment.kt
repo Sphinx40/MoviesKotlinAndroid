@@ -6,17 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sphinx.movies.*
-import com.sphinx.movies.activities.MainActivity
+import com.sphinx.movies.R
 import com.sphinx.movies.activities.MovieDetailsActivity
-import com.sphinx.movies.adapterItems.HomeMovieItem
+import com.sphinx.movies.adapterItems.SearchMovieItem
 import com.sphinx.movies.utils.Globals
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.fragment_now_playing.*
+import kotlinx.android.synthetic.main.fragment_upcoming.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,21 +23,17 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
+ * Use the [UpcomingFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class UpcomingFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    private val popularMoviesAdapter = GroupAdapter<GroupieViewHolder>().apply {
-        addAll(Globals.popularMovies)
+    private val upcomingMoviesAdapter = GroupAdapter<GroupieViewHolder>().apply {
+        addAll(Globals.upcomingMovies)
     }
-    private val topRatedMoviesAdapter = GroupAdapter<GroupieViewHolder>().apply {
-        addAll(Globals.topRatedMovies)
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,37 +47,26 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_upcoming, container, false)
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        (activity as MainActivity).setSupportActionBar(homeToolbar as Toolbar)
-        toolbar_title.text = "Фильмы"
-
-        println(Globals.popularMovies.size)
-
-        popularMoviesRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        popularMoviesRecyclerView.adapter = popularMoviesAdapter
-
-        topRatedMoviesRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        topRatedMoviesRecyclerView.adapter = topRatedMoviesAdapter
-
-        onClickListener(popularMoviesAdapter)
-        onClickListener(topRatedMoviesAdapter)
+        upcomingRecyclerView.layoutManager = LinearLayoutManager(this.context)
+        upcomingRecyclerView.adapter = upcomingMoviesAdapter
+        onClickListener(upcomingMoviesAdapter)
     }
-
-
 
     private fun onClickListener(adapter: GroupAdapter<GroupieViewHolder>) {
         adapter.setOnItemClickListener { item, _ ->
-            val movieItem = item as HomeMovieItem
+            val movieItem = item as SearchMovieItem
             val intent = Intent(this.context, MovieDetailsActivity::class.java)
             intent.putExtra("movieId", movieItem.movie.id)
             startActivity(intent)
         }
     }
-    
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -91,12 +74,12 @@ class HomeFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
+         * @return A new instance of fragment UpcomingFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
+            UpcomingFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

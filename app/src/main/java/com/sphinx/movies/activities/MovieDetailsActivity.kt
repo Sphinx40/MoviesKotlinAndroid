@@ -32,7 +32,6 @@ class MovieDetailsActivity : AppCompatActivity() {
                 if (response.code() == 200) {
                     var genresText = ""
                     val res = response.body()!!
-                    println(res)
                     Picasso
                         .get()
                         .load(imageUrl + imageSizeBig + res.backdrop_path)
