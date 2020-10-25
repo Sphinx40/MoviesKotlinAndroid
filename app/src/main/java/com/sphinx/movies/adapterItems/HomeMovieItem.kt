@@ -1,8 +1,8 @@
 package com.sphinx.movies.adapterItems
 
-import com.sphinx.movies.Config
 import com.sphinx.movies.MovieResult
 import com.sphinx.movies.R
+import com.sphinx.movies.utils.Constants
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -13,8 +13,8 @@ class HomeMovieItem(val movie: MovieResult): Item<GroupieViewHolder>() {
 
         viewHolder.itemView.title.text = movie.title
 
-        val imageUrl = Config.IMAGE_URL
-        val imageSizeSmall = Config.IMAGE_SIZE_SMALL
+        val imageUrl = Constants.IMAGE_URL
+        val imageSizeSmall = Constants.IMAGE_SIZE_SMALL
 
         Picasso.get()
             .load(imageUrl + imageSizeSmall + movie.poster_path)

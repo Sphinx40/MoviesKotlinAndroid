@@ -12,16 +12,18 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val homeFragment = HomeFragment()
+    private val searchFragment = SearchFragment()
+    private val favoriteFragment = FavoriteFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val homeFragment = HomeFragment()
-        val searchFragment = SearchFragment()
-        val favoriteFragment = FavoriteFragment()
 
+
+        // Initialize home fragment and bottom navigation listener
         setCurrentFragment(homeFragment)
-
         main_nav.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> setCurrentFragment(homeFragment)
@@ -33,9 +35,6 @@ class MainActivity : AppCompatActivity() {
 
             true
         }
-
-
-
     }
 
 

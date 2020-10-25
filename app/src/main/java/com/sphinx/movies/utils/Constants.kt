@@ -1,6 +1,6 @@
-package com.sphinx.movies
+package com.sphinx.movies.utils
 
-class Config {
+class Constants {
     companion object {
         val API_KEY = "2af995031242e9bf96fb7bce86c8f7e9";
         val API_URL = "https://api.themoviedb.org/3/";

@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.sphinx.movies.R
 import com.sphinx.movies.adapterItems.SearchMovieItem
 import com.sphinx.movies.services.ServiceBuilder
-import com.sphinx.movies.utils.helpers
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import kotlinx.android.synthetic.main.activity_search_movies.*
