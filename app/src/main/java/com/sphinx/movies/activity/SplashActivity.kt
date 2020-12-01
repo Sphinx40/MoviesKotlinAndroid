@@ -1,4 +1,4 @@
-package com.sphinx.movies.activities
+package com.sphinx.movies.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +10,7 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        supportActionBar?.hide()
 
         // Animate our logotype
         // When the animation is over, we are going to go to another screen

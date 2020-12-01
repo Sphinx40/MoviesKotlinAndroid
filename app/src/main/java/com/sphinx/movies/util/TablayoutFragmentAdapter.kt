@@ -1,4 +1,4 @@
-package com.sphinx.movies.utils
+package com.sphinx.movies.util
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

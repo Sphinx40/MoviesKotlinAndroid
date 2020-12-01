@@ -1,17 +1,17 @@
-package com.sphinx.movies.services
+package com.sphinx.movies.data.service
 
-import com.sphinx.movies.utils.Constants
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.sphinx.movies.util.Constants
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ServiceBuilder {
     private val baseUrl = Constants.API_URL
     private val API_KEY = Constants.API_KEY
 
-    fun create(): MovieService {
+    fun <T> create(service: Class<T>): T {
         val requestInterceptor = Interceptor {chain ->
             val url = chain.request()
                 .url()
@@ -34,11 +34,11 @@ object ServiceBuilder {
 
         val retrofit = Retrofit.Builder()
             .client(okHttpClient)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .baseUrl(baseUrl)
             .build()
 
-        return retrofit.create(MovieService::class.java);
+        return retrofit.create(service);
     }
 }
