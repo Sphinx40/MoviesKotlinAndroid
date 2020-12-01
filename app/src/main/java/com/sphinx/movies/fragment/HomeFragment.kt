@@ -1,6 +1,5 @@
 package com.sphinx.movies.fragment
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,6 @@ import com.sphinx.movies.R
 import com.sphinx.movies.adapter.HomeMoviesAdapter
 import com.sphinx.movies.data.viewmodel.HomeViewModel
 import com.sphinx.movies.data.viewmodel.SharedViewModel
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 class HomeFragment : Fragment() {
