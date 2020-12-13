@@ -3,12 +3,15 @@ package com.sphinx.movies.data.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.sphinx.movies.data.model.Movie
 
 class SharedViewModel(application: Application): AndroidViewModel(application) {
 
-    val progressBarVisibility = MutableLiveData<Boolean>(true)
+    val emptyData = MutableLiveData<Boolean>(true)
+    val dataReceived = MutableLiveData<Boolean>(false)
 
-    fun hideProgressBar() {
-        progressBarVisibility.value = false
+    fun checkData(data: ArrayList<Movie>) {
+        emptyData.value = data.isEmpty()
+        dataReceived.value = true
     }
 }

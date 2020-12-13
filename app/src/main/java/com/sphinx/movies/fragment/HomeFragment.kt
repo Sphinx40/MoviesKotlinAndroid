@@ -12,6 +12,7 @@ import com.sphinx.movies.R
 import com.sphinx.movies.adapter.HomeMoviesAdapter
 import com.sphinx.movies.data.viewmodel.HomeViewModel
 import com.sphinx.movies.data.viewmodel.SharedViewModel
+import com.sphinx.movies.databinding.FragmentHomeBinding
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 class HomeFragment : Fragment() {
@@ -20,47 +21,35 @@ class HomeFragment : Fragment() {
     private val mHomeViewModel: HomeViewModel by activityViewModels()
     private val popularMoviesAdapter: HomeMoviesAdapter by lazy { HomeMoviesAdapter() }
     private val topRatedMoviesAdapter: HomeMoviesAdapter by lazy { HomeMoviesAdapter() }
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        // Data binding
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.mSharedViewModel = mSharedViewModel
 
         // Setup Recycler View
-        setupRecyclerView(view)
-
-        // Hide titles
-        hideProgressBar(view, false)
+        setupRecyclerView(binding.root)
 
         // Observe MutableLiveData
         mHomeViewModel.popularMovies.observe(viewLifecycleOwner, Observer { data ->
             popularMoviesAdapter.setData(data)
         })
         mHomeViewModel.topRatedMovies.observe(viewLifecycleOwner, Observer { data ->
+            mSharedViewModel.checkData(data)
             topRatedMoviesAdapter.setData(data)
-            hideProgressBar(view, true)
         })
 
         // Fetch movies
         mHomeViewModel.fetchPopularMovies()
         mHomeViewModel.fetchTopRatedMovies()
 
-        return view
-    }
-
-    private fun hideProgressBar(view: View, visibility: Boolean) {
-        if (visibility) {
-            view.progressBar.visibility = View.INVISIBLE
-            view.popularTitle.visibility = View.VISIBLE
-            view.topRatedTitle.visibility = View.VISIBLE
-        } else {
-            view.progressBar.visibility = View.VISIBLE
-            view.popularTitle.visibility = View.INVISIBLE
-            view.topRatedTitle.visibility = View.INVISIBLE
-        }
+        return binding.root
     }
 
     private fun setupRecyclerView(view: View) {
